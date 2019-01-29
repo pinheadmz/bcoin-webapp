@@ -6,7 +6,23 @@
   <body style='text-align: center; font-size:25px;'>
     <label for='mne'>Mnemonic phrase: </label>
     <input id='mne' style='width:80%; font-size:25px;' oninput='parseMne()'>
-    <div id='mne-check'></div>
+    <div id='mne-check' style='height:35px'></div>
+    <form name='nets' onchange='parseMne()'>
+      Network:
+      <input type='radio' name='net' value='main' checked><label for='main'>Main</label>
+      <input type='radio' name='net' value='testnet'><label for='testnet'>Testnet</label>
+      <input type='radio' name='net' value='regtest'><label for='regtest'>Regtest</label>
+      <input type='radio' name='net' value='simnet'><label for='simnet'>Simnet</label>
+    </form>
+    <br>
+    <div style='height:25px'>
+      Extended private key:
+      <span id='xpriv' style='font-family: monospace; font-size:15px; display: inline-block; width: 50%'></span>
+    </div>
+    <div style='height:25px'>
+      Extended public key:
+      <span id='xpub' style='font-family: monospace; font-size:15px; display: inline-block; width: 50%'></span>
+    </div>
     <script type="text/javascript" src="HD.js"></script>
 
     <script tpye="text/javascript">
@@ -17,10 +33,20 @@ function parseMne() {
   try {
     mne = HD.Mnemonic.fromPhrase(phrase);
   } catch (e) {
-    document.getElementById('mne-check').innerHTML = `Bad phrase: ${e.message}`;
+    document.getElementById('mne-check').innerHTML = `<span style='color:red'>Bad phrase: ${e.message}</span>`;
+    document.getElementById('xpub').innerHTML = '';
+    document.getElementById('xpriv').innerHTML = '';
     return false;
   }
-  document.getElementById('mne-check').innerHTML = `Phrase OK`;
+  document.getElementById('mne-check').innerHTML = `<span style='color:green'>Phrase OK</span>`;
+  makeKey(mne);
+}
+
+function makeKey(mne) {
+  const hd = HD.fromMnemonic(mne);
+  const net = document.nets.net.value;
+  document.getElementById('xpub').innerHTML = hd.toPublic().toBase58(net)
+  document.getElementById('xpriv').innerHTML = hd.toBase58(net);
 }
 
     </script>
