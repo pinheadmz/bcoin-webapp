@@ -33,8 +33,19 @@
       <input type='number' onchange='parseMne()' style='width:40px' id='branch' min='0' value='0'>/
       <input type='number' onchange='parseMne()' style='width:40px' id='index' min='0' value='0'>
     </div>
-    <div id='explain' style='text-align: left; margin: auto; width: 15%;'></div>
+    <div id='explain' 
+      style='
+        text-align: left;
+        margin: auto;
+        width: 15%;
+        font-family: monospace;
+        font-size: 20px;
+        font-style: italic;
+    '></div>
+    <br>
+    <div id='address' style='font-family: monospace;'></div>
     <script type='text/javascript' src='HD.js'></script>
+    <script type='text/javascript' src='KeyRing.js'></script>
 
     <script tpye='text/javascript'>
 
@@ -58,10 +69,10 @@ function makeKey(mne) {
   const net = document.nets.net.value;
   document.getElementById('xpub').innerHTML = hd.toPublic().toBase58(net)
   document.getElementById('xpriv').innerHTML = hd.toBase58(net);
-  getAddr(hd);
+  getAddr(hd, net);
 }
 
-function getAddr(hd) {
+function getAddr(hd, net) {
   const purpose = parseInt(document.getElementById('purpose').value);
   const coin = parseInt(document.getElementById('coin').value);
   const account = parseInt(document.getElementById('account').value);
@@ -74,7 +85,19 @@ function getAddr(hd) {
     .derive(account, true)
     .derive(branch, false)
     .derive(index, false);
+
+  const ringL = KeyRing.fromPrivate(key.privateKey);
+  ringL.witness = false;
+  const legAddr = ringL.getAddress('base58', net);
+  const ringW = KeyRing.fromPrivate(key.privateKey);
+  ringW.witness = true;
+  const witAddr = ringW.getAddress('string', net);
   
+  let addrInfo = '';
+  addrInfo += `Legacy address: ${legAddr}<br>`;
+  addrInfo += `SegWit address: ${witAddr}`;
+  document.getElementById('address').innerHTML = addrInfo;
+
   let explain = '';
   if (purpose === 44){
     explain += 'Purpose: BIP44<br>';
