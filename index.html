@@ -3,7 +3,26 @@
   <head>
     <title>bcoin webapp</title>
   </head>
-  <body>
+  <body style='text-align: center; font-size:25px;'>
+    <label for='mne'>Mnemonic phrase: </label>
+    <input id='mne' style='width:80%; font-size:25px;' oninput='parseMne()'>
+    <div id='mne-check'></div>
     <script type="text/javascript" src="HD.js"></script>
+
+    <script tpye="text/javascript">
+
+function parseMne() {
+  const phrase = document.getElementById('mne').value;
+  let mne;
+  try {
+    mne = HD.Mnemonic.fromPhrase(phrase);
+  } catch (e) {
+    document.getElementById('mne-check').innerHTML = `Bad phrase: ${e.message}`;
+    return false;
+  }
+  document.getElementById('mne-check').innerHTML = `Phrase OK`;
+}
+
+    </script>
   </body>
 </html>
