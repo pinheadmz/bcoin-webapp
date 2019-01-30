@@ -3,10 +3,10 @@
   <head>
     <title>bcoin webapp</title>
   </head>
-  <body style='text-align: center; font-size:25px;'>
+  <body style='text-align: center; font-size:22px;'>
     <button onclick='generate()' style='height:50px'>Generate!</button><br><br>
     <label for='mne'>Mnemonic phrase: </label>
-    <input id='mne' style='width:80%; font-size:25px;' oninput='parseMne()'>
+    <input id='mne' style='width:80%; font-size:22px;' oninput='parseMne()'>
     <div id='mne-check' style='height:35px'></div>
     <form name='nets' onchange='parseMne()'>
       Network:
@@ -16,11 +16,9 @@
       <input type='radio' name='net' value='simnet'><label for='simnet'>Simnet</label>
     </form>
     <br>
-    <div style='height:25px'>
+    <div style='height:50px; text-align:left'>
       Extended private key:
-      <span id='xpriv' style='font-family: monospace; font-size:15px; display: inline-block; width: 50%'></span>
-    </div>
-    <div style='height:25px'>
+      <span id='xpriv' style='font-family: monospace; font-size:15px; display: inline-block; width: 50%'></span><br>
       Extended public key:
       <span id='xpub' style='font-family: monospace; font-size:15px; display: inline-block; width: 50%'></span>
     </div>
@@ -59,6 +57,8 @@ function parseMne() {
     document.getElementById('mne-check').innerHTML = `<span style='color:red'>Bad phrase: ${e.message}</span>`;
     document.getElementById('xpub').innerHTML = '';
     document.getElementById('xpriv').innerHTML = '';
+    document.getElementById('explain').innerHTML = '';
+    document.getElementById('address').innerHTML = '';
     return false;
   }
   document.getElementById('mne-check').innerHTML = `<span style='color:green'>Phrase OK</span>`;
