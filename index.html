@@ -4,6 +4,7 @@
     <title>bcoin webapp</title>
   </head>
   <body style='text-align: center; font-size:25px;'>
+    <button onclick='generate()' style='height:50px'>Generate!</button><br><br>
     <label for='mne'>Mnemonic phrase: </label>
     <input id='mne' style='width:80%; font-size:25px;' oninput='parseMne()'>
     <div id='mne-check' style='height:35px'></div>
@@ -109,6 +110,11 @@ function getAddr(hd, net) {
   document.getElementById('explain').innerHTML = explain;
 }
 
+function generate() {
+  const newMne = new HD.Mnemonic().toString();
+  document.getElementById('mne').value = newMne;
+  parseMne();
+}
     </script>
   </body>
 </html>
